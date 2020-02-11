@@ -2,22 +2,22 @@
 
 ## Project setup
 ```
-npm install
+使用vue create创建项目并覆盖相关文件
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+vue-cli-service serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+vue-cli-service build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+vue-cli-service lint
 ```
 
 ### Customize configuration
