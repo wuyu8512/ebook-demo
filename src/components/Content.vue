@@ -44,7 +44,7 @@ export default {
       .content-item {
         border-bottom: px2rem(1) solid #f4f4f4;
         .text {
-          padding: px2rem(10) 0 px2rem(10) px2rem(10);
+          padding: px2rem(10);
           font-size: px2rem(14);
           color: #333;
           // text-overflow:ellipsis;
