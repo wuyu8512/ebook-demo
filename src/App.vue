@@ -1,28 +1,28 @@
 <template>
-<div id="app">
-  <router-view />
-</div>
+	<div id="app">
+		<v-app>
+			<router-view/>
+		</v-app>
+	</div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const html = document.querySelector('html')
-  let fontSize = window.innerWidth / 10
-  fontSize = fontSize > 50 ? 50 : fontSize
-  html.style.fontSize = fontSize + 'px'
-})
-// window.onresize = () => {
-//   let fontSize = window.innerWidth / 10
-//   fontSize = fontSize > 50 ? 50 : fontSize
-//   const html = document.querySelector('html')
-//   html.style.fontSize = fontSize + 'px'
-// }
+	export default {
+		name: 'App'
+	}
+	document.addEventListener('DOMContentLoaded', () => {
+		const html = document.querySelector('html')
+		let fontSize = window.innerWidth / 10
+		fontSize = fontSize > 50 ? 50 : fontSize
+		html.style.fontSize = fontSize + 'px'
+	})
 </script>
 
 <style lang="scss" scoped>
-
+	#app {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
 
 </style>
