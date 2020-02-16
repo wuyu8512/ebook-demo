@@ -1,8 +1,8 @@
 <template>
 	<transition name="slide-right">
-		<div class="content">
-			<div class="content-wrapper">
-				<div class="content-item" v-for="(item,index) in bookState.navigation" :key="index"
+		<div class="content" v-show="bookState.settingVisible===3">
+			<div class="content-wrapper" v-if="bookState.bookAvailable">
+				<div class="content-item" v-for="(item,index) in bookState.book.navigation.toc" :key="index"
 						 @click="jumpTo(item.href)">
 					<p class="text">{{item.label}}</p>
 				</div>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-	import bookState from "../../store/bookState"
+	import bookState from '../../store/bookState'
 
 	export default {
 		data() {
@@ -22,8 +22,8 @@
 		},
 		methods: {
 			jumpTo(href) {
-				bookState.settingVisible = 0
-				bookState.book.rendition.display(href)
+				bookState.settingVisible = -1
+				bookState.display(href)
 			}
 		}
 	}

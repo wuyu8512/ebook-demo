@@ -5,7 +5,7 @@
 </template>
 
 <script>
-	import Epub from '../../assets/js/epub.min'
+	import Epub from '../../assets/js/epub'
 	import bookState from '../../store/bookState'
 	import {THEME_LIST} from '../../store/bookState'
 	import {FONT_STYLE} from '../../store/font'
@@ -16,20 +16,21 @@
 	export default {
 		methods: {
 			prevPage() {
+				console.log('上一页')
 				if (this.rendition) {
 					this.rendition.prev().then(() => {
 						bookState.refreshLocation()
 					})
-					console.log('上一页')
 					this.hide()
 				}
 			},
 			nextPage() {
+				// window.alert('Hello world!');
+				console.log('下一页')
 				if (this.rendition) {
 					this.rendition.next().then(() => {
 						bookState.refreshLocation()
 					})
-					console.log(this.book.rendition.currentLocation(), 1111111)
 					this.hide()
 				}
 			},
@@ -90,36 +91,43 @@
 				})
 				//页面点击事件
 				this.rendition.on('click', e => {
-					console.log(e)
+					console.log(e, window)
 					if (this.hide()) return
 					if (e.target.localName === 'a' || e.target.parentNode.localName === 'a'
 					) {
 						return
 					}
-					if (e.x % window.innerWidth > window.innerWidth * 0.75) {
+					if (e.screenX - window.screenX > window.innerWidth * 0.75) {
 						this.nextPage()
-					} else if (e.x % window.innerWidth < window.innerWidth * 0.25) {
+					} else if (e.screenX - window.screenX < window.innerWidth * 0.25) {
 						this.prevPage()
-					} else if (e.clientY < window.innerHeight * 0.75 && e.clientY > window.innerHeight * 0.25) this.show()
+					} else if (e.y < window.innerHeight * 0.75 && e.y > window.innerHeight * 0.25) this.show()
 				})
+				// document.onclick = e => {
+				// 	console.log(e, 2)
+				// }
 			},
-			initEpub: function (url) {
+			initEpub(url) {
 				console.log(url)
 				this.book = new Epub(url)
 				bookState.book = this.book
 				this.rendition = this.book.renderTo('read', {
 					width: innerWidth,
 					height: innerHeight,
+					// flow: 'paginated',
+					manager: 'continuous',
+					// snap: true,
 					// method: 'default'
 				})
 				//先加载主题
-				this.LoadTheme()
 				//渲染
 				bookState.display(getLocation(bookState.fileName), () => {
 					//初始化字体
-					this.loadFontSize()
-					this.loadFont()
+					// this.loadFontSize()
 				})
+				this.LoadTheme()
+				this.loadFontSize()
+				this.loadFont()
 				//注册相关事件和写入样式
 				this.initEvent()
 				//加载目录
@@ -127,7 +135,8 @@
 						.then(() => {
 							// 修改网页title
 							document.title = this.book.package.metadata.title
-							return this.book.locations.generate(750 * (window.innerWidth / 375) * bookState.defaultFontSize / 16)
+							// return this.book.locations.generate(750 * (window.innerWidth / 375) * bookState.defaultFontSize / 16)
+							return this.book.locations.generate()
 						})
 						.then(() => {
 							bookState.bookAvailable = true
@@ -145,6 +154,7 @@
 				vApp.style.fontFamily = 'sans-serif'
 				if (theme) {
 					vApp.style.background = theme.back
+					bookState.defaultTheme = theme.name
 				} else {
 					vApp.style.background = THEME_LIST[0].back
 				}
@@ -185,9 +195,11 @@
 		mounted() {
 			this.initBookState()
 			myVue = this
-			const fileName = this.$route.params.fileName.split('|').join('/')
+			// const fileName = this.$route.params.fileName.split('|').join('/')
+			const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
 			bookState.fileName = fileName
-			this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
+			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
+			this.initEpub('http://192.168.1.8:8081/' + fileName + '.epub')
 		},
 		name: 'EbookReader'
 	}

@@ -18,7 +18,8 @@ const bookState = {
 	section: 0,
 	refreshLocation(isSave = true, isProgress = true) {
 		const currentLocation = this.book.rendition.currentLocation()
-		const startCfi = currentLocation.start.cfi
+		console.log(currentLocation)
+		const startCfi = currentLocation.end.cfi
 		if (isSave) saveLocation(this.fileName, startCfi)
 		if (this.bookAvailable) {
 			let index = currentLocation.start.index
@@ -33,8 +34,8 @@ const bookState = {
 				}
 			}
 			if (isProgress) {
-				const process = this.book.locations.percentageFromCfi(startCfi)
-				this.progress = Math.floor(process * 1000)
+				// const process =
+				this.progress = Math.floor(currentLocation.start.percentage * 1000)
 			}
 		}
 	},

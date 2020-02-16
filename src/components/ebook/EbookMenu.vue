@@ -6,8 +6,6 @@
 					<v-icon color="black" :style="{cursor: bookState.bookAvailable?'pointer':'not-allowed'}"
 									:key="bookState.bookAvailable">{{mdiFormatListBulleted}}
 					</v-icon>
-					<!--					<span class="icon-menu" :style="{cursor: bookState.bookAvailable?'pointer':'not-allowed'}"-->
-					<!--								:key="bookState.bookAvailable"></span>-->
 				</div>
 				<div class="icon-wrapper" @click="showSetting(2)">
 					<span class="icon-progress" :style="{cursor: bookState.bookAvailable?'pointer':'not-allowed'}"
@@ -25,7 +23,7 @@
 		<setting-font-family></setting-font-family>
 		<setting-theme></setting-theme>
 		<setting-progress></setting-progress>
-		<content-view v-show="bookState.settingVisible===3"></content-view>
+		<content-view></content-view>
 	</div>
 </template>
 
@@ -56,23 +54,16 @@
 		},
 		methods: {
 			showSetting(tag) {
-				if (tag === 3) {
+				if (tag >= 2) {
 					if (bookState.bookAvailable) {
-						this.ifShowContent = true
+						bookState.settingVisible = tag
+						bookState.menuVisible = false
 						bookState.titleVisible = false
 					}
 				} else {
-					if (tag !== 2) {
-						bookState.menuVisible = false
-						bookState.settingVisible = tag
-						bookState.titleVisible = false
-					} else {
-						if (bookState.bookAvailable) {
-							bookState.menuVisible = false
-							bookState.settingVisible = tag
-							bookState.titleVisible = false
-						}
-					}
+					bookState.menuVisible = false
+					bookState.settingVisible = tag
+					bookState.titleVisible = false
 				}
 			},
 		},

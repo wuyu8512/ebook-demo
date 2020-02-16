@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide-up">
-		<div class="setting-wrapper" v-show="bookState.settingVisible===2">
+		<div class="setting-wrapper" v-show="bookState.settingVisible===2" v-if="bookState.bookAvailable">
 			<div class="setting-progress">
 				<div class="read-time-wrapper">
 					<span class="read time-wrapper">{{getReadTimeText()}}</span>
@@ -81,19 +81,16 @@
 			},
 			getReadTimeText() {
 				const readTime = getReadTime(bookState.fileName)
-				if(readTime){
-					return `已读${Math.ceil(getReadTime(bookState.fileName) / 60) }分钟`
-				}else {
+				if (readTime) {
+					return `已读${Math.ceil(getReadTime(bookState.fileName) / 60)}分钟`
+				} else {
 					return '已读0分钟'
 				}
 			}
 		},
 		computed: {
 			getSectionName() {
-				if (bookState.bookAvailable) {
-					return bookState.book.navigation.toc[bookState.section].label
-				}
-				return bookState.fileName.split('/')[1]
+				return bookState.book.navigation.toc[bookState.section].label
 			}
 		},
 		mounted() {
