@@ -1,11 +1,13 @@
 <template>
-	<div class="ebook-reader">
-		<div id="read"></div>
+	<div>
+		<div class="ebook-reader">
+			<div id="read"></div>
+		</div>
 	</div>
 </template>
 
 <script>
-	import Epub from '../../assets/js/epub'
+	import Epub from '../../assets/js/epub.min'
 	import bookState from '../../store/bookState'
 	import {THEME_LIST} from '../../store/bookState'
 	import {FONT_STYLE} from '../../store/font'
@@ -26,7 +28,7 @@
 			},
 			nextPage() {
 				// window.alert('Hello world!');
-				console.log('下一页')
+				console.log(this.book)
 				if (this.rendition) {
 					this.rendition.next().then(() => {
 						bookState.refreshLocation()
@@ -73,7 +75,9 @@
 						: 'mousewheel'
 				//注册鼠标滚轮事件,写入CSS
 				// let _URL =  || window.webkitURL || window.mozURL;
-				let styleUrl = window.URL.createObjectURL(new Blob([FONT_STYLE], {'type': 'text/css'}))
+				let styleUrl = window.URL.createObjectURL(
+						new Blob([FONT_STYLE], {type: 'text/css'})
+				)
 				this.rendition.hooks.content.register(function (contents) {
 					contents.document.addEventListener(
 							mousewheel,
@@ -91,9 +95,11 @@
 				})
 				//页面点击事件
 				this.rendition.on('click', e => {
-					console.log(e, window)
+					// console.log(e, window)
 					if (this.hide()) return
-					if (e.target.localName === 'a' || e.target.parentNode.localName === 'a'
+					if (
+							e.target.localName === 'a' ||
+							e.target.parentNode.localName === 'a'
 					) {
 						return
 					}
@@ -101,19 +107,23 @@
 						this.nextPage()
 					} else if (e.screenX - window.screenX < window.innerWidth * 0.25) {
 						this.prevPage()
-					} else if (e.y < window.innerHeight * 0.75 && e.y > window.innerHeight * 0.25) this.show()
+					} else if (
+							e.y < window.innerHeight * 0.75 &&
+							e.y > window.innerHeight * 0.25
+					)
+						this.show()
 				})
 				// document.onclick = e => {
 				// 	console.log(e, 2)
 				// }
 			},
-			initEpub(url) {
-				console.log(url)
-				this.book = new Epub(url)
+			initEpub(book) {
+				document.getElementById('input').style.display = 'none'
+				this.book = book
 				bookState.book = this.book
 				this.rendition = this.book.renderTo('read', {
-					width: innerWidth,
-					height: innerHeight,
+					width: window.innerWidth,
+					height: window.innerHeight,
 					// flow: 'paginated',
 					manager: 'continuous',
 					// snap: true,
@@ -121,13 +131,14 @@
 				})
 				//先加载主题
 				//渲染
+				this.loadFontSize()
+				this.loadFont()
 				bookState.display(getLocation(bookState.fileName), () => {
 					//初始化字体
 					// this.loadFontSize()
+					// this.loadFont()
 				})
 				this.LoadTheme()
-				this.loadFontSize()
-				this.loadFont()
 				//注册相关事件和写入样式
 				this.initEvent()
 				//加载目录
@@ -176,11 +187,9 @@
 			loadFontSize() {
 				let fontSize = getFontSize()
 				if (fontSize) {
-					console.log(5)
 					bookState.defaultFontSize = fontSize
 					this.rendition.themes.fontSize(fontSize + 'px')
 				} else {
-					console.log(1)
 					this.rendition.themes.fontSize(bookState.defaultFontSize + 'px')
 					saveFontSize(bookState.defaultFontSize)
 				}
@@ -196,10 +205,12 @@
 			this.initBookState()
 			myVue = this
 			// const fileName = this.$route.params.fileName.split('|').join('/')
-			const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
-			bookState.fileName = fileName
+			// const fileName = '做过头的魔神歼灭者的七大罪游戏/做过头的魔神歼灭者的七大罪游戏 01'
+			// const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
+			// bookState.fileName = fileName
 			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
-			this.initEpub('http://192.168.1.8:8081/' + fileName + '.epub')
+			// this.initEpub(new Epub('http://192.168.1.10:8081/' + fileName + '.epub'))
+			inputEvent()
 		},
 		name: 'EbookReader'
 	}
@@ -213,8 +224,33 @@
 			},
 			false
 	)
+
+	// eslint-disable-next-line no-unused-vars
+	function show(e) {
+		var book = new Epub()
+		book.open(e.target.result)
+		myVue.initEpub(book)
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	function inputEvent() {
+		var inputElement = document.getElementById('input')
+		inputElement.addEventListener(
+				'change',
+				function (e) {
+					var file = e.target.files[0]
+					bookState.fileName = file.name
+					console.log(file)
+					if (window.FileReader) {
+						var read = new FileReader()
+						read.onload = show
+						read.readAsArrayBuffer(file)
+					}
+				},
+				false
+		)
+	}
 </script>
 
 <style scoped>
-
 </style>

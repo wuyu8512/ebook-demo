@@ -2,9 +2,9 @@
 	<transition name="slide-up">
 		<div class="setting-font-list" v-show="bookState.setFontFamilyVisible">
 			<div class="setting-font-title">
-				<div class="setting-font-title-icon" @click="hide">
-					<span class="icon-down2"></span>
-				</div>
+				<!--				<div class="setting-font-title-icon" @click="hide">-->
+				<!--					<span class="icon-down2"></span>-->
+				<!--				</div>-->
 				<span class="setting-font-title-text">选择字体</span>
 				<!--				<v-switch class="setting-font-title-switch" v-model="switch1" label="强制模式" @change="changeSwitch"></v-switch>-->
 			</div>

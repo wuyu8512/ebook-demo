@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+		<input type="file" id="input" style="font-size: 20px"/>
 		<v-app>
 			<router-view/>
 		</v-app>

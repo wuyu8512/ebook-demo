@@ -33,7 +33,7 @@
 .slide-up-leave-active,
 .read-wrapper-show-leave-active,
 .read-wrapper-show-enter-active {
-  transition: all 0.3s linear;
+  transition: all 0.2s linear;
 }
 
 .slide-right-enter-active, .slide-right-leave-active {
@@ -41,7 +41,7 @@
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .3s;
 }
 
 .fade-enter, .fade-leave-to {

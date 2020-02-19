@@ -18,8 +18,7 @@ const bookState = {
 	section: 0,
 	refreshLocation(isSave = true, isProgress = true) {
 		const currentLocation = this.book.rendition.currentLocation()
-		console.log(currentLocation)
-		const startCfi = currentLocation.end.cfi
+		const startCfi = currentLocation.start.cfi
 		if (isSave) saveLocation(this.fileName, startCfi)
 		if (this.bookAvailable) {
 			let index = currentLocation.start.index
