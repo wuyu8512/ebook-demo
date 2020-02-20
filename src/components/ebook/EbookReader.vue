@@ -27,8 +27,7 @@
 				}
 			},
 			nextPage() {
-				// window.alert('Hello world!');
-				console.log(this.book)
+				console.log('下一页')
 				if (this.rendition) {
 					this.rendition.next().then(() => {
 						bookState.refreshLocation()
@@ -42,10 +41,6 @@
 					bookState.menuVisible = false
 					temp = true
 				}
-				if (bookState.contentVisible) {
-					temp = true
-					bookState.contentVisible = false
-				}
 				if (bookState.titleVisible) {
 					bookState.titleVisible = false
 					temp = true
@@ -53,10 +48,6 @@
 				if (bookState.settingVisible > -1) {
 					bookState.settingVisible = -1
 					temp = true
-				}
-				if (bookState.setFontFamilyVisible) {
-					temp = true
-					bookState.setFontFamilyVisible = false
 				}
 				return temp
 			},
@@ -113,12 +104,9 @@
 					)
 						this.show()
 				})
-				// document.onclick = e => {
-				// 	console.log(e, 2)
-				// }
 			},
 			initEpub(book) {
-				document.getElementById('input').style.display = 'none'
+				// document.getElementById('input').style.display = 'none'
 				this.book = book
 				bookState.book = this.book
 				this.rendition = this.book.renderTo('read', {
@@ -129,18 +117,16 @@
 					// snap: true,
 					// method: 'default'
 				})
-				//先加载主题
-				//渲染
+				//先加载会影响布局的字体
 				this.loadFontSize()
 				this.loadFont()
-				bookState.display(getLocation(bookState.fileName), () => {
-					//初始化字体
-					// this.loadFontSize()
-					// this.loadFont()
-				})
+				//渲染
+				bookState.display(getLocation(bookState.fileName))
+				//加载主题
 				this.LoadTheme()
 				//注册相关事件和写入样式
 				this.initEvent()
+				this.parseBook()
 				//加载目录
 				this.book.ready
 						.then(() => {
@@ -168,6 +154,7 @@
 					bookState.defaultTheme = theme.name
 				} else {
 					vApp.style.background = THEME_LIST[0].back
+					bookState.defaultTheme = '默认'
 				}
 
 				THEME_LIST.forEach(theme => {
@@ -199,18 +186,36 @@
 				bookState.section = 0
 				bookState.progress = 0
 				bookState.settingVisible = -1
+				bookState.fileName = ''
+				bookState.cover = ''
+				bookState.author = ''
+				bookState.searchVisible = false
+				bookState.menuVisible = false
+				bookState.titleVisible = false
+			},
+			parseBook() {
+				this.book?.loaded.cover.then(cover => {
+					this.book.archive.createUrl(cover).then(url => {
+						bookState.cover = url
+						console.log(url)
+					})
+				})
+				this.book.loaded.metadata.then(metadata => {
+					bookState.metadata = metadata
+					// saveMetadata(this.fileName, metadata)
+				})
 			}
 		},
 		mounted() {
-			this.initBookState()
+			// this.initBookState()
 			myVue = this
 			// const fileName = this.$route.params.fileName.split('|').join('/')
 			// const fileName = '做过头的魔神歼灭者的七大罪游戏/做过头的魔神歼灭者的七大罪游戏 01'
-			// const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
-			// bookState.fileName = fileName
+			const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
+			bookState.fileName = fileName
 			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
-			// this.initEpub(new Epub('http://192.168.1.10:8081/' + fileName + '.epub'))
-			inputEvent()
+			this.initEpub(new Epub('http://192.168.1.10:8081/' + fileName + '.epub'))
+			// inputEvent()
 		},
 		name: 'EbookReader'
 	}

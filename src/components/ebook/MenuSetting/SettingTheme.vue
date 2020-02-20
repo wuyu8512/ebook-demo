@@ -29,9 +29,9 @@
 		},
 		methods: {
 			setTheme(index) {
+				bookState.defaultTheme = this.themeList[index].name
 				bookState.book.rendition.themes.select(this.themeList[index].className)
 				document.querySelector('div.v-application').style.background = this.themeList[index].back
-				bookState.defaultTheme = this.themeList[index].name
 				saveTheme(this.themeList[index])
 			}
 		}
@@ -59,7 +59,7 @@
 					flex: 1;
 
 					&.selected {
-						border: 2px solid #ff8836;
+						box-shadow: px2rem(2) px2rem(2) px2rem(2) rgba(black, 0.15);
 					}
 				}
 
@@ -71,7 +71,8 @@
 					cursor: default;
 
 					&.selected {
-						color: #333;
+						color: #346cb9;
+						font-weight: bold;
 					}
 				}
 			}

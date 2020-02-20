@@ -3,7 +3,7 @@
 		<div class="setting-wrapper" v-show="bookState.settingVisible===2" v-if="bookState.bookAvailable">
 			<div class="setting-progress">
 				<div class="read-time-wrapper">
-					<span class="read time-wrapper">{{getReadTimeText()}}</span>
+					<span class="read time-wrapper">{{bookState.getReadTimeText()}}</span>
 					<v-icon color="black">{{mdiChevronRight}}</v-icon>
 				</div>
 				<div class="progress-wrapper">
@@ -48,8 +48,6 @@
 			onProgressChange(progress) {
 				bookState.progress = progress
 				const cfi = bookState.book.locations.cfiFromPercentage(progress / 1000)
-				// console.log(cfi)
-				// bookState.display(cfi)
 				bookState.book.rendition.display(cfi).then(() => {
 					bookState.refreshLocation(true, false)
 				})
@@ -68,7 +66,6 @@
 				}
 			},
 			nextSection() {
-				console.log(bookState.book)
 				if (bookState.section < bookState.book.navigation.length - 1) {
 					bookState.section++
 					this.displaySection()
@@ -79,14 +76,6 @@
 				bookState.sectionName = bookState.book.navigation.toc[bookState.section].label
 				bookState.display(sectionInfo.href)
 			},
-			getReadTimeText() {
-				const readTime = getReadTime(bookState.fileName)
-				if (readTime) {
-					return `已读${Math.ceil(getReadTime(bookState.fileName) / 60)}分钟`
-				} else {
-					return '已读0分钟'
-				}
-			}
 		},
 		computed: {
 			getSectionName() {

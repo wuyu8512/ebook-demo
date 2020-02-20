@@ -23,27 +23,27 @@
 		<setting-font-family></setting-font-family>
 		<setting-theme></setting-theme>
 		<setting-progress></setting-progress>
-		<content-view></content-view>
+		<ebook-slide></ebook-slide>
 	</div>
 </template>
 
 <script>
-	import ContentView from './Content'
 	import bookState from '../../store/bookState'
-	import SettingFontFamily from './Setting/SettingFontFamily'
-	import SettingFont from './Setting/SettingFont'
-	import SettingTheme from './Setting/SettingTheme'
-	import SettingProgress from './Setting/SettingProgress'
+	import SettingFontFamily from './MenuSetting/SettingFontFamily'
+	import SettingFont from './MenuSetting/SettingFont'
+	import SettingTheme from './MenuSetting/SettingTheme'
+	import SettingProgress from './MenuSetting/SettingProgress'
 	import {mdiFormatListBulleted} from '@mdi/js'
+	import EbookSlide from './EbookSlide'
 
 	export default {
 		name: 'EbookMenu',
 		components: {
+			EbookSlide,
 			SettingProgress,
 			SettingTheme,
 			SettingFontFamily,
 			SettingFont,
-			ContentView,
 		},
 		data() {
 			return {

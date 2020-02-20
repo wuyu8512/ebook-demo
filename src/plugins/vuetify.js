@@ -8,9 +8,6 @@ import '@mdi/js'
 Vue.use(Vuetify)
 
 export default new Vuetify({
-	theme: {
-		disable: true,
-	},
 	icons: {
 		iconfont: 'mdiSvg',
 	},

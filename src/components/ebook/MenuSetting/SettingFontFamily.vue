@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide-up">
-		<div class="setting-font-list" v-show="bookState.setFontFamilyVisible">
+		<div class="setting-font-list" v-show="bookState.settingVisible === 4">
 			<div class="setting-font-title">
 				<!--				<div class="setting-font-title-icon" @click="hide">-->
 				<!--					<span class="icon-down2"></span>-->
@@ -36,9 +36,9 @@
 			}
 		},
 		methods: {
-			hide() {
-				bookState.setFontFamilyVisible = false
-			},
+			// hide() {
+			// 	bookState.settingVisible = -1
+			// },
 			isSelected(item) {
 				return bookState.defaultFontName === item.name
 			},

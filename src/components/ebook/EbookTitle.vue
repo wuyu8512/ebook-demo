@@ -9,7 +9,7 @@
 					<p class="text" ref="titleText" v-show="bookState.titleTextVisible">书籍加载中...</p>
 				</transition>
 			</div>
-			<div class="icon">
+			<div class="icon" @click="showSearch" style="cursor: pointer;">
 				<span class="icon-search"></span>
 			</div>
 		</div>
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-	import book from "../../store/bookState"
+	import bookState from '../../store/bookState'
 
 	export default {
-		name: "EbookTitle",
+		name: 'EbookTitle',
 		data() {
 			return {
-				bookState: book
+				bookState: bookState
 			}
 		},
 		methods: {
@@ -32,6 +32,11 @@
 			},
 			setTitleText(text) {
 				this.$refs.titleText.textContent = text
+			},
+			showSearch() {
+				bookState.menuVisible = false
+				bookState.titleVisible = false
+				bookState.searchVisible = true
 			}
 		},
 		mounted() {

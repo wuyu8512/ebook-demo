@@ -34,12 +34,12 @@
 </template>
 
 <script>
-	import bookState from "../../../store/bookState"
-	import {FONT_SIZE_LIST} from "../../../store/bookState"
-	import {saveFontSize} from "../../../plugins/localStorage"
+	import bookState from '../../../store/bookState'
+	import {FONT_SIZE_LIST} from '../../../store/bookState'
+	import {saveFontSize} from '../../../plugins/localStorage'
 
 	export default {
-		name: "SettingFont",
+		name: 'SettingFont',
 		data() {
 			return {
 				bookState: bookState,
@@ -53,8 +53,7 @@
 				saveFontSize(fontSize)
 			},
 			showFontFamily() {
-				bookState.settingVisible = -1
-				bookState.setFontFamilyVisible = true
+				bookState.settingVisible = 4
 			}
 		}
 	}

@@ -1,11 +1,12 @@
 import imgUrlBlack from '../assets/images/reading__reading_themes_vine_black.jpg'
 import imgUrlYellow from '../assets/images/reading__reading_themes_vine_yellow.jpg'
-import {saveLocation} from '../plugins/localStorage'
+import {getReadTime, saveLocation} from '../plugins/localStorage'
 
 const bookState = {
 	fileName: '',
 	titleVisible: false,
-	settingVisible: -1, //-1:不显示,0:字号,1:主题,2:进度,3:目录
+	settingVisible: -1, //-1:不显示,0:字号,1:主题,2:进度,3:目录,4字体
+	searchVisible: false,
 	titleTextVisible: true,
 	menuVisible: false,
 	bookAvailable: false,
@@ -13,9 +14,10 @@ const bookState = {
 	defaultFontName: '默认',
 	defaultTheme: '默认',
 	book: null,	//Book对象
-	setFontFamilyVisible: false,
 	progress: 0,
 	section: 0,
+	cover: '',
+	metadata: null,
 	refreshLocation(isSave = true, isProgress = true) {
 		const currentLocation = this.book.rendition.currentLocation()
 		const startCfi = currentLocation.start.cfi
@@ -49,10 +51,18 @@ const bookState = {
 			if (cb) cb()
 		}
 	},
+	getReadTimeText() {
+		const readTime = getReadTime(this.fileName)
+		if (readTime) {
+			return `已读${Math.ceil(getReadTime(this.fileName) / 60)}分钟`
+		} else {
+			return '已读0分钟'
+		}
+	}
 }
 
-export default bookState
 
+export default bookState
 export const FONT_SIZE_LIST = [
 	{
 		fontSize: 14

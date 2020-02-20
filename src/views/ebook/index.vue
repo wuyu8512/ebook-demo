@@ -3,6 +3,7 @@
 		<ebook-title></ebook-title>
 		<ebook-reader></ebook-reader>
 		<ebook-menu></ebook-menu>
+		<ebook-search></ebook-search>
 	</div>
 </template>
 
@@ -12,36 +13,37 @@
 	import EbookMenu from '../../components/ebook/EbookMenu'
 	import {getReadTime, saveReadTime} from '../../plugins/localStorage'
 	import bookState from '../../store/bookState'
+	import EbookSearch from '../../components/ebook/EbookSearch'
 
 	export default {
 		name: 'index',
-		components: {EbookReader, EbookTitle, EbookMenu},
-		methods:{
-			startLoopReadTime(){
+		components: {EbookSearch, EbookReader, EbookTitle, EbookMenu},
+		methods: {
+			startLoopReadTime() {
 				console.log(bookState.fileName)
 				let readTime = getReadTime(bookState.fileName)
-				if (!readTime){
-					readTime=0
+				if (!readTime) {
+					readTime = 0
 				}
-				this.task = setInterval(()=>{
-					readTime++
-					if (readTime%30===0){
-						saveReadTime(bookState.fileName,readTime)
+				this.task = setInterval(() => {
+					if (!document.hidden) {
+						// console.log(readTime)
+						readTime++
+						if (readTime % 30 === 0) {
+							saveReadTime(bookState.fileName, readTime)
+						}
 					}
-				},1000)
-			}
+				}, 1000)
+			},
 		},
 		mounted() {
 			this.startLoopReadTime()
 		},
 		beforeDestroy() {
-			if(this.task)
-			{
+			if (this.task) {
 				clearInterval(this.task)
 			}
-
 		}
-
 	}
 </script>
 
