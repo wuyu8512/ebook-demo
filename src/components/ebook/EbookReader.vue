@@ -9,9 +9,10 @@
 <script>
 	import Epub from '../../assets/js/epub.min'
 	import bookState from '../../store/bookState'
+	import {flatten} from '../../utils/book'
 	import {THEME_LIST} from '../../store/bookState'
 	import {FONT_STYLE} from '../../store/font'
-	import {getFontName, getFontSize, saveFontSize, getTheme, getLocation} from '../../plugins/localStorage'
+	import {getFontName, getFontSize, saveFontSize, getTheme, getLocation} from '../../utils/localStorage'
 
 	let myVue = {}
 	global.ePub = Epub
@@ -132,12 +133,11 @@
 						.then(() => {
 							// 修改网页title
 							document.title = this.book.package.metadata.title
-							// return this.book.locations.generate(750 * (window.innerWidth / 375) * bookState.defaultFontSize / 16)
-							return this.book.locations.generate()
+							return this.book.locations.generate(750 * (window.innerWidth / 375) * bookState.defaultFontSize / 16)
+							// return this.book.locations.generate()
 						})
-						.then(() => {
+						.then((locations) => {
 							bookState.bookAvailable = true
-							bookState.navigation = this.book.navigation
 							bookState.setTitleText('加载完成')
 							bookState.refreshLocation(false)
 							setTimeout(function () {
@@ -194,15 +194,25 @@
 				bookState.titleVisible = false
 			},
 			parseBook() {
-				this.book?.loaded.cover.then(cover => {
+				this.book.loaded.cover.then(cover => {
 					this.book.archive.createUrl(cover).then(url => {
 						bookState.cover = url
-						console.log(url)
 					})
 				})
 				this.book.loaded.metadata.then(metadata => {
 					bookState.metadata = metadata
-					// saveMetadata(this.fileName, metadata)
+				})
+				this.book.loaded.navigation.then(nav => {
+					const navItem = flatten(nav.toc)
+
+					function find(item, levle = 0) {
+						return !item.parent ? levle : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++levle)
+					}
+
+					navItem.forEach(item => {
+						item.level = find(item)
+					})
+					bookState.navigation = navItem
 				})
 			}
 		},
@@ -210,8 +220,9 @@
 			// this.initBookState()
 			myVue = this
 			// const fileName = this.$route.params.fileName.split('|').join('/')
-			// const fileName = '做过头的魔神歼灭者的七大罪游戏/做过头的魔神歼灭者的七大罪游戏 01'
-			const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
+			// const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
+			// const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
+			const fileName = '神话传说英雄的异世界奇谭/神话传说英雄的异世界奇谭 12'
 			bookState.fileName = fileName
 			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
 			this.initEpub(new Epub('http://192.168.1.10:8081/' + fileName + '.epub'))

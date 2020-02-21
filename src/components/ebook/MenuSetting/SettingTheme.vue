@@ -17,7 +17,7 @@
 <script>
 	import bookState from '../../../store/bookState'
 	import {THEME_LIST} from '../../../store/bookState'
-	import {saveTheme} from '../../../plugins/localStorage'
+	import {saveTheme} from '../../../utils/localStorage'
 
 	export default {
 		name: 'SettingTheme',
@@ -67,13 +67,8 @@
 					@include center;
 					flex: 0 0 px2rem(20);
 					font-size: px2rem(10);
-					color: #999;
+					/*color: #999;*/
 					cursor: default;
-
-					&.selected {
-						color: #346cb9;
-						font-weight: bold;
-					}
 				}
 			}
 		}

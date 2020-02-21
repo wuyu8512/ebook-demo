@@ -1,3 +1,8 @@
 @import "reset.scss";
 @import "mixin.scss";
 @import "transition.scss";
+
+.selected {
+  color: #346cb9;
+  font-weight: bold;
+}

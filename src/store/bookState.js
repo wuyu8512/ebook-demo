@@ -1,6 +1,6 @@
 import imgUrlBlack from '../assets/images/reading__reading_themes_vine_black.jpg'
 import imgUrlYellow from '../assets/images/reading__reading_themes_vine_yellow.jpg'
-import {getReadTime, saveLocation} from '../plugins/localStorage'
+import {saveLocation} from '../utils/localStorage'
 
 const bookState = {
 	fileName: '',
@@ -18,25 +18,17 @@ const bookState = {
 	section: 0,
 	cover: '',
 	metadata: null,
+	navigation: null,
 	refreshLocation(isSave = true, isProgress = true) {
 		const currentLocation = this.book.rendition.currentLocation()
-		const startCfi = currentLocation.start.cfi
-		if (isSave) saveLocation(this.fileName, startCfi)
-		if (this.bookAvailable) {
-			let index = currentLocation.start.index
-			while (index >= 0) {
-				const href = this.book.spine.spineItems[index].href
-				const section_temp = this.book.navigation.toc.findIndex((toc) => toc.href === href)
-				if (section_temp !== -1) {
-					this.section = section_temp
-					break
-				} else {
-					index--
+		if (currentLocation && currentLocation.start) {
+			const startCfi = currentLocation.start.cfi
+			if (isSave) saveLocation(this.fileName, startCfi)
+			if (this.bookAvailable) {
+				console.log(currentLocation, this.navigation)
+				if (isProgress) {
+					this.progress = Math.floor(currentLocation.start.percentage * 1000)
 				}
-			}
-			if (isProgress) {
-				// const process =
-				this.progress = Math.floor(currentLocation.start.percentage * 1000)
 			}
 		}
 	},
@@ -51,41 +43,9 @@ const bookState = {
 			if (cb) cb()
 		}
 	},
-	getReadTimeText() {
-		const readTime = getReadTime(this.fileName)
-		if (readTime) {
-			return `已读${Math.ceil(getReadTime(this.fileName) / 60)}分钟`
-		} else {
-			return '已读0分钟'
-		}
-	}
 }
 
-
 export default bookState
-export const FONT_SIZE_LIST = [
-	{
-		fontSize: 14
-	},
-	{
-		fontSize: 16
-	},
-	{
-		fontSize: 18
-	},
-	{
-		fontSize: 20
-	},
-	{
-		fontSize: 22
-	},
-	{
-		fontSize: 24
-	},
-	{
-		fontSize: 26
-	}
-]
 export const THEME_LIST = [
 	{
 		className: 'default',

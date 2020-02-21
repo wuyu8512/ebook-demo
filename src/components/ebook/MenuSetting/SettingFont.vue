@@ -35,8 +35,8 @@
 
 <script>
 	import bookState from '../../../store/bookState'
-	import {FONT_SIZE_LIST} from '../../../store/bookState'
-	import {saveFontSize} from '../../../plugins/localStorage'
+	import {FONT_SIZE_LIST} from '../../../store/font'
+	import {saveFontSize} from '../../../utils/localStorage'
 
 	export default {
 		name: 'SettingFont',

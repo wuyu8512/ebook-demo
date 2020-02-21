@@ -36,3 +36,12 @@ $fontsize: 37.5;
   text-overflow: ellipsis;
   word-break: break-all;
 }
+
+@mixin scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

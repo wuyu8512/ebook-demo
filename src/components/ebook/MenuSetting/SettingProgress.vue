@@ -3,7 +3,7 @@
 		<div class="setting-wrapper" v-show="bookState.settingVisible===2" v-if="bookState.bookAvailable">
 			<div class="setting-progress">
 				<div class="read-time-wrapper">
-					<span class="read time-wrapper">{{bookState.getReadTimeText()}}</span>
+					<span class="read time-wrapper">{{getReadTimeText(bookState.fileName)}}</span>
 					<v-icon color="black">{{mdiChevronRight}}</v-icon>
 				</div>
 				<div class="progress-wrapper">
@@ -31,8 +31,8 @@
 
 <script>
 	import bookState from '../../../store/bookState'
+	import {getReadTimeText} from '../../../utils/book'
 	import {mdiChevronLeft, mdiChevronRight} from '@mdi/js'
-	import {getReadTime} from '../../../plugins/localStorage'
 
 	export default {
 		name: 'SettingProgress',
@@ -42,6 +42,7 @@
 				isFirefox: false,
 				mdiChevronLeft: mdiChevronLeft,
 				mdiChevronRight: mdiChevronRight,
+				getReadTimeText: getReadTimeText
 			}
 		},
 		methods: {
@@ -66,20 +67,18 @@
 				}
 			},
 			nextSection() {
-				if (bookState.section < bookState.book.navigation.length - 1) {
+				if (bookState.section < bookState.navigation.length - 1) {
 					bookState.section++
 					this.displaySection()
 				}
 			},
 			displaySection() {
-				const sectionInfo = bookState.book.navigation.toc[bookState.section]
-				bookState.sectionName = bookState.book.navigation.toc[bookState.section].label
-				bookState.display(sectionInfo.href)
+				bookState.display(bookState.navigation[bookState.section].href)
 			},
 		},
 		computed: {
 			getSectionName() {
-				return bookState.book.navigation.toc[bookState.section].label
+				return bookState.section ? bookState.navigation[bookState.section].label : ''
 			}
 		},
 		mounted() {

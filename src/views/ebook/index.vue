@@ -11,7 +11,7 @@
 	import EbookReader from '../../components/ebook/EbookReader'
 	import EbookTitle from '../../components/ebook/EbookTitle'
 	import EbookMenu from '../../components/ebook/EbookMenu'
-	import {getReadTime, saveReadTime} from '../../plugins/localStorage'
+	import {getReadTime, saveReadTime} from '../../utils/localStorage'
 	import bookState from '../../store/bookState'
 	import EbookSearch from '../../components/ebook/EbookSearch'
 

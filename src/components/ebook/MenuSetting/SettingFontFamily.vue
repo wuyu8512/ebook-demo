@@ -24,7 +24,7 @@
 <script>
 	import bookState from '../../../store/bookState'
 	import {FONT_FAMILY} from '../../../store/font'
-	import {saveFontName} from '../../../plugins/localStorage'
+	import {saveFontName} from '../../../utils/localStorage'
 
 	export default {
 		name: 'SettingFontFamily',
@@ -112,11 +112,6 @@
 				display: flex;
 				padding: px2rem(10);
 
-
-				&.selected {
-					color: #346cb9;
-					font-weight: bold;
-				}
 
 				.setting-font-item-text {
 					flex: 1;
