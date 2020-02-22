@@ -8,6 +8,8 @@
 
 <script>
 	import Epub from '../../assets/js/epub.min'
+	// import Epub from 'epubjs'
+	import {EpubCFI} from 'epubjs'
 	import bookState from '../../store/bookState'
 	import {flatten} from '../../utils/book'
 	import {THEME_LIST} from '../../store/bookState'
@@ -16,6 +18,7 @@
 
 	let myVue = {}
 	global.ePub = Epub
+	global.ePubCfi = new EpubCFI()
 	export default {
 		methods: {
 			prevPage() {
@@ -71,6 +74,22 @@
 						new Blob([FONT_STYLE], {type: 'text/css'})
 				)
 				this.rendition.hooks.content.register(function (contents) {
+					const baseName = contents.cfiBase.match(/\[(.*?)\]/)[1]
+					bookState.navigation.forEach((navItem) => {
+						if (navItem.href.indexOf(baseName) !== -1) {
+							const href = navItem.href.match(/\/(.*?)$/)[1]
+							let id = undefined
+							if (href.indexOf('#') !== -1) {
+								id = href.split('#')[1]
+							}
+							if (id) {
+								//得到每个目录的cfi地址
+								const node = contents.document.getElementById(id)
+								const cfi = new EpubCFI(node, contents.cfiBase)
+								navItem.cfi = cfi.toString()
+							}
+						}
+					})
 					contents.document.addEventListener(
 							mousewheel,
 							e => {
@@ -133,10 +152,10 @@
 						.then(() => {
 							// 修改网页title
 							document.title = this.book.package.metadata.title
-							return this.book.locations.generate(750 * (window.innerWidth / 375) * bookState.defaultFontSize / 16)
-							// return this.book.locations.generate()
+							// return this.book.locations.generate(750 * (window.innerWidth / 375) * bookState.defaultFontSize / 16)
+							return this.book.locations.generate()
 						})
-						.then((locations) => {
+						.then(() => {
 							bookState.bookAvailable = true
 							bookState.setTitleText('加载完成')
 							bookState.refreshLocation(false)
@@ -220,12 +239,12 @@
 			// this.initBookState()
 			myVue = this
 			// const fileName = this.$route.params.fileName.split('|').join('/')
-			// const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
+			const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
 			// const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
-			const fileName = '神话传说英雄的异世界奇谭/神话传说英雄的异世界奇谭 12'
+			// const fileName = '神话传说英雄的异世界奇谭/神话传说英雄的异世界奇谭 12'
 			bookState.fileName = fileName
 			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
-			this.initEpub(new Epub('http://192.168.1.10:8081/' + fileName + '.epub'))
+			this.initEpub(new Epub('http://192.168.1.9:8081/' + fileName + '.epub'))
 			// inputEvent()
 		},
 		name: 'EbookReader'

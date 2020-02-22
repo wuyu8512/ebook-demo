@@ -67,18 +67,20 @@
 				}
 			},
 			nextSection() {
-				if (bookState.section < bookState.navigation.length - 1) {
+				if (bookState.section < bookState.navigation.length) {
 					bookState.section++
 					this.displaySection()
 				}
 			},
 			displaySection() {
-				bookState.display(bookState.navigation[bookState.section].href)
+				bookState.book.rendition.display(bookState.navigation[bookState.section - 1].href).then(() => {
+					bookState.refreshLocation(true, true, false)
+				})
 			},
 		},
 		computed: {
 			getSectionName() {
-				return bookState.section ? bookState.navigation[bookState.section].label : ''
+				return bookState.section ? bookState.navigation[bookState.section - 1].label : bookState.fileName
 			}
 		},
 		mounted() {

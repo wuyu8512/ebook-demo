@@ -5,7 +5,7 @@ let fontStyle = `@font-face {
   src: url('{mi_lan_ting}');
 }`
 
-fontStyle = fontStyle.replace('{mi_lan_ting}', window.location.origin + MI_LAN_TING)
+fontStyle = fontStyle.replace('{mi_lan_ting}', window.location.origin + '/' + MI_LAN_TING)
 
 export const FONT_STYLE = fontStyle
 

@@ -18,7 +18,7 @@
 		<div class="slide-contents-list-wrapper" :style="{height:getHeight()}">
 			<div class="slide-contents-list" v-for="(item,index) in bookState.navigation" :key="index"
 					 @click="jump(item.href)">
-				<span class="slide-contents-item-label" :class="{'selected':bookState.section === index}"
+				<span class="slide-contents-item-label" :class="{'selected':bookState.section - 1 === index}"
 							:style="contentItemStyle(item)">{{item.label}}</span>
 				<span class="slide-contents-item-page"></span>
 			</div>
