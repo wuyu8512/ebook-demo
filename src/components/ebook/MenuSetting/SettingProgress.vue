@@ -80,7 +80,7 @@
 		},
 		computed: {
 			getSectionName() {
-				return bookState.section ? bookState.navigation[bookState.section - 1].label : bookState.fileName
+				return bookState.section ? bookState.navigation[bookState.section - 1].label : bookState.metadata.title
 			}
 		},
 		mounted() {

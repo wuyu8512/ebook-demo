@@ -10,7 +10,7 @@
 					<v-tab-item>
 						<contents></contents>
 					</v-tab-item>
-					<v-tab-item>bookmark</v-tab-item>
+					<v-tab-item></v-tab-item>
 				</v-tabs-items>
 			</div>
 		</div>

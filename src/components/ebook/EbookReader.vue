@@ -8,7 +8,6 @@
 
 <script>
 	import Epub from '../../assets/js/epub.min'
-	// import Epub from 'epubjs'
 	import {EpubCFI} from 'epubjs'
 	import bookState from '../../store/bookState'
 	import {flatten} from '../../utils/book'
@@ -70,9 +69,7 @@
 						: 'mousewheel'
 				//注册鼠标滚轮事件,写入CSS
 				// let _URL =  || window.webkitURL || window.mozURL;
-				let styleUrl = window.URL.createObjectURL(
-						new Blob([FONT_STYLE], {type: 'text/css'})
-				)
+				let styleUrl = window.URL.createObjectURL(new Blob([FONT_STYLE], {type: 'text/css'}))
 				this.rendition.hooks.content.register(function (contents) {
 					const baseName = contents.cfiBase.match(/\[(.*?)\]/)[1]
 					bookState.navigation.forEach((navItem) => {
@@ -123,6 +120,12 @@
 							e.y > window.innerHeight * 0.25
 					)
 						this.show()
+				})
+				//箭头翻页,似乎有问题,暂时无法判断
+				this.rendition.on('keyup', event => {
+					let kc = event.keyCode
+					if (kc === 37) myVue.prevPage()
+					else if (kc === 39) myVue.nextPage()
 				})
 			},
 			initEpub(book) {
@@ -239,8 +242,8 @@
 			// this.initBookState()
 			myVue = this
 			// const fileName = this.$route.params.fileName.split('|').join('/')
-			const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
-			// const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
+			// const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
+			const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
 			// const fileName = '神话传说英雄的异世界奇谭/神话传说英雄的异世界奇谭 12'
 			bookState.fileName = fileName
 			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)

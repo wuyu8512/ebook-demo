@@ -80,10 +80,6 @@ const bookState = {
 	},
 }
 
-function find(spineItem, cfi) {
-	return spineItem.findIndex(item => item.href.indexOf(cfi))
-}
-
 export default bookState
 export const THEME_LIST = [
 	{
