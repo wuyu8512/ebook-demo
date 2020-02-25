@@ -28,7 +28,6 @@
 	import {THEME_LIST} from '../../store/bookState'
 	import bookState from '../../store/bookState'
 	import {mdiMagnify, mdiCancel} from '@mdi/js'
-	import {realPx} from '../../utils/utils'
 
 	export default {
 		name: 'EbookSearch',
@@ -57,12 +56,7 @@
 								.then(item.find.bind(item, q)).finally(item.unload.bind(item)))
 				).then(results => Promise.resolve([].concat.apply([], results)))
 			},
-			getHeight() {
-				console.log(realPx(20) + 38)
-				return (window.innerHeight - realPx(20) - 38) + 'px'
-			},
 			search() {
-				console.log(realPx(20) + 38)
 				if (this.searchText && this.searchText.length > 0) {
 					this.doSearch(this.searchText).then(list => {
 						this.searchList = list

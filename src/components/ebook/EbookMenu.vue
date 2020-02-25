@@ -8,8 +8,8 @@
 					</v-icon>
 				</div>
 				<div class="icon-wrapper" @click="showSetting(2)">
-								<span class="icon-progress" :style="{cursor: bookState.bookAvailable?'pointer':'not-allowed'}"
-											:key="bookState.bookAvailable"></span>
+					<span class="icon-progress" :style="{cursor: bookState.bookAvailable?'pointer':'not-allowed'}"
+								:key="bookState.bookAvailable"></span>
 				</div>
 				<div class="icon-wrapper" @click="showSetting(1)">
 					<span class="icon-bright" style="cursor: pointer;"></span>

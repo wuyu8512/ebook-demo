@@ -3,6 +3,9 @@
 		<div class="ebook-reader">
 			<div id="read"></div>
 		</div>
+		<div class="images" v-viewer>
+			<img :src="img.src" :alt="img.alt">
+		</div>
 	</div>
 </template>
 
@@ -19,6 +22,14 @@
 	global.ePub = Epub
 	global.ePubCfi = new EpubCFI()
 	export default {
+		data() {
+			return {
+				img: {
+					src: null,
+					alt: null,
+				}
+			}
+		},
 		methods: {
 			prevPage() {
 				console.log('上一页')
@@ -67,7 +78,7 @@
 				const mousewheel = /Firefox/i.test(navigator.userAgent)
 						? 'DOMMouseScroll'
 						: 'mousewheel'
-				//注册鼠标滚轮事件,写入CSS
+				//注册鼠标滚轮事件,写入CSS,图片点击事件
 				// let _URL =  || window.webkitURL || window.mozURL;
 				let styleUrl = window.URL.createObjectURL(new Blob([FONT_STYLE], {type: 'text/css'}))
 				this.rendition.hooks.content.register(function (contents) {
@@ -100,26 +111,31 @@
 					)
 					contents.addStylesheet(styleUrl).then(() => {
 					})
+					contents.document.querySelectorAll('.duokan-image-single img').forEach(node => {
+						node.style.boxShadow = 'black 0 0 3px'
+						node.style.cursor = 'pointer'
+						node.style.border = '1px solid white'
+						node.onclick = myVue.previewImg
+					})
 				})
-				//页面点击事件
-				this.rendition.on('click', e => {
-					// console.log(e, window)
+				//单击事件
+				this.rendition.on('mousedown', event => {
+					this.timeStart = event.timeStamp
+				})
+				this.rendition.on('mouseup', event => {
+					const time = event.timeStamp - this.timeStart
 					if (this.hide()) return
-					if (
-							e.target.localName === 'a' ||
-							e.target.parentNode.localName === 'a'
-					) {
-						return
+					if (event.target.localName === 'a' || event.target.parentNode.localName === 'a') return
+					const path = event.path || event.composedPath()
+					if (event.target.localName === 'img' && path) {
+						const classList = [].concat(...path.map(item => [].concat.apply([], item.classList)))
+						if (classList.findIndex(item => item === 'duokan-image-single') !== -1) return
 					}
-					if (e.screenX - window.screenX > window.innerWidth * 0.75) {
-						this.nextPage()
-					} else if (e.screenX - window.screenX < window.innerWidth * 0.25) {
-						this.prevPage()
-					} else if (
-							e.y < window.innerHeight * 0.75 &&
-							e.y > window.innerHeight * 0.25
-					)
-						this.show()
+					if (time < 200) {
+						if (event.screenX - window.screenX > window.innerWidth * 0.75) this.nextPage()
+						else if (event.screenX - window.screenX < window.innerWidth * 0.25) this.prevPage()
+						else if (event.y < window.innerHeight * 0.75 && event.y > window.innerHeight * 0.25) this.show()
+					}
 				})
 				//箭头翻页,似乎有问题,暂时无法判断
 				this.rendition.on('keyup', event => {
@@ -236,6 +252,12 @@
 					})
 					bookState.navigation = navItem
 				})
+			},
+			previewImg(event) {
+				this.img.src = event.target.src
+				this.img.alt = event.target.alt
+				const viewer = this.$el.querySelector('.images').$viewer
+				viewer.show()
 			}
 		},
 		mounted() {
@@ -243,7 +265,7 @@
 			myVue = this
 			// const fileName = this.$route.params.fileName.split('|').join('/')
 			// const fileName = '刀剑神域/Sword Art Online刀剑神域 01 艾恩葛朗特'
-			const fileName = 'Campione弑神者！/Campione─弑神者─！ 01'
+			const fileName = 'Campione弑神者！/Campione─弑神者─！ 03'
 			// const fileName = '神话传说英雄的异世界奇谭/神话传说英雄的异世界奇谭 12'
 			bookState.fileName = fileName
 			// this.initEpub(`${process.env.VUE_APP_RES_URL}/${fileName}.epub`)
@@ -290,5 +312,8 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+	.images {
+		display: none;
+	}
 </style>

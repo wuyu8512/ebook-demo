@@ -5,6 +5,12 @@ import vuetify from './plugins/vuetify'
 import './assets/styles/icon.css'
 import './assets/styles/global.scss'
 
+import 'viewerjs/dist/viewer.css'
+import Viewer from 'v-viewer'
+
+Viewer.setDefaults({navbar: false})
+Vue.use(Viewer)
+
 Vue.config.productionTip = false
 
 new Vue({

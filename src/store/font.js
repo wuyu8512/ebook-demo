@@ -11,7 +11,7 @@ export const FONT_STYLE = fontStyle
 
 export const FONT_FAMILY = [
 	{font: 'Default', name: '默认'},
-	// {font: 'mi_lan_ting', name: "小米兰亭"}
+	{font: 'mi_lan_ting', name: '小米兰亭'}
 ]
 
 export const FONT_SIZE_LIST = [
